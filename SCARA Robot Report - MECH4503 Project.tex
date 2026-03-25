@@ -588,7 +588,7 @@ This function generates a 3D wireframe of the robot in any specified joint confi
 function SCARA_schematic(th1_deg, th2_deg, d3, th4_deg)
     if nargin < 1, th1_deg=30; th2_deg=45; d3=0.05; th4_deg=0; end
     
-    % Parameters (meters)
+    % Parameters (in meters)
     a1=0.300; a2=0.200; d1=0.400; d4=0.050;
     th1=deg2rad(th1_deg); th2=deg2rad(th2_deg); th4=deg2rad(th4_deg);
     
@@ -631,8 +631,9 @@ function SCARA_workspace()
     th2_v=linspace(-th2_lim, th2_lim, N);
     d3_v =linspace(d3_min, d3_max, 50);
     
+    % Forward Kinematics
     [TH1,TH2]=meshgrid(th1_v,th2_v);
-    PX = a1*cos(TH1) + a2*cos(TH1+TH2);  % Forward Kinematics
+    PX = a1*cos(TH1) + a2*cos(TH1+TH2);  
     PY = a1*sin(TH1) + a2*sin(TH1+TH2);
     
     figure('Color','w');
@@ -675,8 +676,8 @@ function SCARA_kinematics_sim()
     
     figure('Color','w'); hold on; grid on; axis equal;
     plot3(px,py,pz,'b-','LineWidth',2);
-    scatter3(px(1),py(1),pz(1),80,'go','filled');   % Start point
-    scatter3(px(end),py(end),pz(end),80,'rs','filled'); % End point
+    scatter3(px(1),py(1),pz(1),80,'go','filled');
+    scatter3(px(end),py(end),pz(end),80,'rs','filled');
     title('SCARA End-Effector Trajectory (FK simulation)');
     legend({'EE path','Start','End'},'Location','best');
     view(40,30);
