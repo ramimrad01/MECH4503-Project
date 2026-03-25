@@ -76,8 +76,8 @@
     % Author info
     \vfill
     \begin{flushleft}
-    \textbf{Name:} Rami Mrad\\
-    \textbf{Student ID:} 101237780\\
+    \textbf{Name:} Rami Mrad, Anik Marchildon\\
+    \textbf{Student ID:} 101237780, 101226641\\
     \textbf{Professor:} J.Z. Sasiadek\\
     \end{flushleft}
     
@@ -168,20 +168,7 @@ Joint & Type & Symbol & Motion & Role \\
 
 
 \subsection{Joint Parameters and DH Convention}
-% \newline
-% \newline
-% \newline
-% \newline
-
-% % ADD COORDINATE FRAMES
-
-% \newline
-% \newline
-% \newline
-% \newline
-
-The Denavit-Hartenberg (DH) parameterisation assigns four scalar parameters to each link-joint pair: link length $a_i$, link twist $\alpha_i$, joint offset $d_i$, and joint angle $\theta_i$. The four DH parameters for the standard SCARA are given in Table 2. Note that joint 3 is prismatic, so $d_3$ is the variable, and joints 1, 2, 4 are revolute so $\theta_i$ are variables.
-
+The Denavit-Hartenberg (DH) parameterisation assigns four scalar parameters to each link-joint pair: link length $a_i$, link twist $\alpha_i$, joint offset $d_i$, and joint angle $\theta_i$. The parameters for this SCARA model are summarized in Table 2, and the corresponding coordinate frame assignments are illustrated in Figure \ref{fig:frame_sketch}.
 \newpage
 
 \begin{table}[h!]
@@ -199,11 +186,22 @@ Joint $i$ & $a_i$ (m) & $\alpha_i$ (rad) & $d_i$ (m) & $\theta_i$ (rad) \\
 \caption{DH parameters for the standard 4-DOF SCARA robot.}
 \end{table}
 
-Here $d_1$ is the constant height of the first revolute axis above the base frame, and $d_4$ is an optional constant offset between joint 3 and the tool. Typical industrial values are $a_1 \approx 0.3$--$0.5$~m, $a_2 \approx 0.2$--$0.4$~m, and the stroke of joint 3 is roughly $0.1$--$0.2$~m.
+Typical industrial values for this model are $a_1 = 0.300$~m, $a_2 = 0.200$~m, and a prismatic stroke for joint 3 of approximately $0.150$~m.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{frame_sketch.png}
+    \caption{Detailed coordinate frame assignments. Note the $180^\circ$ twist ($\alpha_2 = \pi$) at Joint 2, which directs the $Z_2, Z_3,$ and $Z_4$ axes downward.}
+    \label{fig:frame_sketch}
+\end{figure}
 
-The coordinate frame assignments follow the standard DH convention: frame 0 is fixed at the base with $Z_0$ pointing upward, frame 1 has $Z_1$ parallel to $Z_0$ (joint 1 rotates about $Z_1$), and frame 2 has its $Z_2$ axis \textit{anti-parallel} to $Z_1$ (this is the direct consequence of $\alpha_2 = \pi$). The link twist angle $\alpha_2 = \pi$ signifies a $180^\circ$ rotation of the Z-axis about $X_1$ when transitioning from frame 1 to frame 2. As a result, $Z_2$ points downward, which means: (a)~joint~3 (prismatic) translates in the $-Z_0$ direction when $d_3$ increases; and (b)~the (3,3) entry of $T_1^2$ is $-1$ rather than $+1$. This anti-parallel Z convention is the single most non-obvious feature of the SCARA DH table and the source of the negative signs seen throughout the kinematics and dynamics.
+The frame assignments follow the standard DH convention with one critical specification: frame 2 has its $Z_2$ axis \textit{anti-parallel} to $Z_1$. As shown in Figure \ref{fig:frame_sketch}, the link twist $\alpha_2 = \pi$ signifies a $180^\circ$ rotation of the Z-axis about $X_1$ when transitioning from frame 1 to frame 2. 
 
-
+As a result, $Z_2$ points downward, ensuring that:
+\begin{enumerate}
+    \item Joint 3 (prismatic) translates in the downward direction ($ -Z_0$) as the variable $d_3$ increases.
+    \item The (3,3) entry of the $T_1^2$ transformation matrix is $-1$.
+\end{enumerate}
+This anti-parallel Z convention is the defining feature of this SCARA model and serves as the source of the negative signs appearing throughout the kinematic and dynamic derivations in Sections 3 and 7.
 
 
 % ---------------- Section 3 ----------------
@@ -270,7 +268,7 @@ p_z &= d_1 - d_3 - d_4 \nonumber
 
 The end-effector orientation about $Z$ is $\phi = \theta_1 + \theta_2 - \theta_4$ (the subtraction appears because $\alpha_2 = \pi$ reverses the sense of joint 4 relative to the tool). This is a key feature of the SCARA robot, where position and orientation are partially decoupled, which simplifies both planning and inverse kinematics.
 
-The validity of the forward kinematic model in Equation 3.8 is demonstrated through a numerical simulation of a sinusoidal joint trajectory. Figure 2 illustrates the resulting continuous path of the end-effector in 3D space.
+The validity of the forward kinematic model in Equation 3.8 is demonstrated through a numerical simulation of a sinusoidal joint trajectory. Figure \ref{fig:FK_sim} illustrates the resulting continuous path of the end-effector in 3D space.
 
 \begin{figure}[H]
     \centering
